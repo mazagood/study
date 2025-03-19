@@ -1,4 +1,2 @@
 # study
-
-
-asdad112313
+my python test
