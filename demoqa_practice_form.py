@@ -2,7 +2,6 @@ import pytest
 import time
 import os
 from playwright.sync_api import sync_playwright, expect
-from pytest_playwright.pytest_playwright import browser
 
 BASE_URL = "https://demoqa.com"
 PRACTICE_FORM_URL = f"{BASE_URL}/automation-practice-form"
@@ -11,7 +10,8 @@ USER_DATA = {
     "first_name": "Alexander",
     "last_name": "Mazein",
     "email": "alexander.mazein@gmail.com",
-    "phone_number": "2131231231"
+    "phone_number": "2131231231",
+    "address": "Раушская наб., 6, Москва, 115035"
 }
 
 @pytest.fixture
@@ -48,4 +48,35 @@ def test_practice_form(page):
     page.select_option('.react-datepicker__year-select', value='2017')
     page.click('.react-datepicker__day--025')
 
-    time.sleep(30)
+    page.fill("#subjectsInput", "Ph")
+    page.click("#react-select-2-option-0")
+    page.fill("#subjectsInput", "C")
+    page.click("#react-select-2-option-6")
+    page.fill("#subjectsInput", "E")
+    page.click("#react-select-2-option-4")
+
+    page.click("//label[@for='hobbies-checkbox-1']")
+    page.click("//label[@for='hobbies-checkbox-2']")
+    page.click("//label[@for='hobbies-checkbox-3']")
+    page.click("//label[@for='hobbies-checkbox-2']")
+
+    test_file_path = "test_upload.png"
+    with open(test_file_path, "w") as f:
+        f.write("This is a test file content for upload testing.")
+
+    file_input = page.locator("#uploadPicture")
+    file_input.set_input_files(test_file_path)
+
+    page.fill("#currentAddress", USER_DATA["address"])
+
+    page.click("#state")
+    page.click("#react-select-3-option-3")
+    page.click("#city")
+    page.click("#react-select-4-option-0")
+
+    page.click("#submit")
+    time.sleep(5)
+    page.click("#closeLargeModal")
+
+
+    time.sleep(5)
