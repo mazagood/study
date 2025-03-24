@@ -9,7 +9,7 @@ PRACTICE_FORM_URL = f"{BASE_URL}/automation-practice-form"
 USER_DATA = {
     "first_name": "Alexander",
     "last_name": "Mazein",
-    "email": "alexander.mazein@gmail.com",
+    "email": "random.mail@gmail.com",
     "phone_number": "2131231231",
     "address": "Раушская наб., 6, Москва, 115035"
 }
@@ -61,8 +61,6 @@ def test_practice_form(page):
     page.click("//label[@for='hobbies-checkbox-2']")
 
     test_file_path = "test_upload.png"
-    with open(test_file_path, "w") as f:
-        f.write("This is a test file content for upload testing.")
 
     file_input = page.locator("#uploadPicture")
     file_input.set_input_files(test_file_path)
