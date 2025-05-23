@@ -6,6 +6,10 @@ import string
 
 BASE_URL = "https://reqres.in/api"
 
+headers = {
+    'x-api-key': 'reqres-free-v1'
+}
+
 created_user_id = None
 test_user_data = None
 
@@ -55,7 +59,7 @@ def test_get_single_user():
     user_id = 3
     url = f"{BASE_URL}/users/{user_id}"
 
-    response = requests.get(url)
+    response = requests.get(url, headers=headers)
 
     log_request_info("GET", url, response=response)
 
@@ -82,7 +86,7 @@ def test_create_user():
 
     url = f"{BASE_URL}/users"
 
-    response = requests.post(url, json=test_user_data)
+    response = requests.post(url, json=test_user_data, headers=headers)
 
     log_request_info("POST", url, test_user_data, response)
 
@@ -109,7 +113,7 @@ def test_update_user_put():
 
     url = f"{BASE_URL}/users/{created_user_id}"
 
-    response = requests.put(url, json=updated_user_data)
+    response = requests.put(url, json=updated_user_data, headers=headers)
 
     log_request_info("PUT", url, updated_user_data, response)
 
@@ -132,7 +136,7 @@ def test_update_user_patch():
 
     url = f"{BASE_URL}/users/{created_user_id}"
 
-    response = requests.patch(url, json=patch_data)
+    response = requests.patch(url, json=patch_data, headers=headers)
 
     log_request_info("PATCH", url, patch_data, response)
 
@@ -149,7 +153,7 @@ def test_delete_user():
 
     url = f"{BASE_URL}/users/{created_user_id}"
 
-    response = requests.delete(url)
+    response = requests.delete(url, headers=headers)
 
     log_request_info("DELETE", url, response=response)
 
@@ -161,7 +165,7 @@ def test_get_nonexistent_user():
     user_id = 999
     url = f"{BASE_URL}/users/{user_id}"
 
-    response = requests.get(url)
+    response = requests.get(url, headers=headers)
 
     log_request_info("GET", url, response=response)
 
@@ -173,7 +177,7 @@ def test_create_user_invalid_data():
 
     url = f"{BASE_URL}/users"
 
-    response = requests.post(url, json=empty_data)
+    response = requests.post(url, json=empty_data, headers=headers)
 
     log_request_info("POST", url, empty_data, response)
 
@@ -188,7 +192,7 @@ def test_register_user_successful():
 
     url = f"{BASE_URL}/register"
 
-    response = requests.post(url, json=register_data)
+    response = requests.post(url, json=register_data, headers=headers)
 
     log_request_info("POST", url, register_data, response)
 
@@ -206,7 +210,7 @@ def test_register_user_unsuccessful():
 
     url = f"{BASE_URL}/register"
 
-    response = requests.post(url, json=incomplete_data)
+    response = requests.post(url, json=incomplete_data, headers=headers)
 
     log_request_info("POST", url, incomplete_data, response)
 
@@ -219,7 +223,7 @@ def test_get_users_witch_pagination():
 
     url = f"{BASE_URL}/users?page=2&per_page=3"
 
-    response = requests.get(url)
+    response = requests.get(url, headers=headers)
 
     log_request_info("GET", url, response=response)
 
@@ -238,7 +242,7 @@ def test_login_successful():
 
     url = f"{BASE_URL}/login"
 
-    response = requests.post(url, json=user_data)
+    response = requests.post(url, json=user_data, headers=headers)
 
     log_request_info("POST", url, response=response)
 

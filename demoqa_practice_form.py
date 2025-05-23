@@ -1,7 +1,7 @@
 import pytest
 import time
-import os
 from playwright.sync_api import sync_playwright, expect
+
 
 BASE_URL = "https://demoqa.com"
 PRACTICE_FORM_URL = f"{BASE_URL}/automation-practice-form"
@@ -25,6 +25,7 @@ def page():
 
         yield page
 
+        browser.close()
 
 def scroll_to_element(page, selector):
     page.evaluate(f'document.querySelector("{selector}").scrollIntroView()')
@@ -73,8 +74,7 @@ def test_practice_form(page):
     page.click("#react-select-4-option-0")
 
     page.click("#submit")
-    time.sleep(5)
+    time.sleep(2)
     page.click("#closeLargeModal")
 
-
-    time.sleep(5)
+    time.sleep(2)
