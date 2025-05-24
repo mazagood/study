@@ -57,3 +57,23 @@ def test_text_box_form(page):
     expect(page.locator("#email")).to_contain_text(USER_DATA["email"])
     expect(page.locator(".border #currentAddress")).to_contain_text(USER_DATA["address"])
     expect(page.locator(".border #permanentAddress")).to_contain_text(USER_DATA["address"])
+
+def test_chech_box(page):
+
+    page.goto(CHECK_BOX_URL)
+
+    page.click(".rct-collapse-btn")
+
+    page.click("//span[text()='Desktop']/..//span[@class='rct-checkbox']")
+
+    result_text = page.locator(".display-result")
+    expect(result_text).to_be_visible()
+    expect(result_text).to_contain_text("desktop")
+    expect(result_text).to_contain_text("note")
+    expect(result_text).to_contain_text("commands")
+
+    page.click("//span[text()='Documents']/../span[@class='rct-checkbox']")
+
+    expect(result_text).to_contain_text("documents")
+    expect(result_text).to_contain_text("workspace")
+    expect(result_text).to_contain_text("office")
