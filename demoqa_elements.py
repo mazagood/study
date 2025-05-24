@@ -58,7 +58,7 @@ def test_text_box_form(page):
     expect(page.locator(".border #currentAddress")).to_contain_text(USER_DATA["address"])
     expect(page.locator(".border #permanentAddress")).to_contain_text(USER_DATA["address"])
 
-def test_chech_box(page):
+def test_check_box(page):
 
     page.goto(CHECK_BOX_URL)
 
@@ -77,3 +77,21 @@ def test_chech_box(page):
     expect(result_text).to_contain_text("documents")
     expect(result_text).to_contain_text("workspace")
     expect(result_text).to_contain_text("office")
+
+def test_radio_button(page):
+
+    page.goto(RADIO_BUTTON_URL)
+
+    page.click("//label[@for='yesRadio']")
+
+    success_text = page.locator(".text-success")
+    expect(success_text).to_be_visible()
+    expect(success_text).to_have_text("Yes")
+
+    page.click("//label[@for='impressiveRadio']")
+
+    expect(success_text).to_be_visible()
+    expect(success_text).to_have_text("Impressive")
+
+    no_radio = page.locator("#noRadio")
+    expect(no_radio).to_be_disabled()
