@@ -149,3 +149,23 @@ def test_web_tables(page):
     delete_button.click()
 
     expect(page.locator(f"//div[contains(text(), '{edited_data['email']}')]")).to_have_count(0)
+
+def test_buttons(page):
+     page.goto(BUTTONS_URL)
+
+     double_click_button = page.locator("#doubleClickBtn")
+     double_click_button.dblclick()
+
+     expect(page.locator("#doubleClickMessage")).to_be_visible()
+     expect(page.locator("#doubleClickMessage")).to_have_text("You have done a double click")
+
+     right_click_button = page.locator("#rightClickBtn")
+     right_click_button.click(button="right")
+
+     expect(page.locator("#rightClickMessage")).to_be_visible()
+     expect(page.locator("#rightClickMessage")).to_have_text("You have done a right click")
+
+     page.click("//button[text()='Click Me']")
+
+     expect(page.locator("#dynamicClickMessage")).to_be_visible()
+     expect(page.locator("#dynamicClickMessage")).to_have_text("You have done a dynamic click")
