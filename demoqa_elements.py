@@ -169,3 +169,30 @@ def test_buttons(page):
 
      expect(page.locator("#dynamicClickMessage")).to_be_visible()
      expect(page.locator("#dynamicClickMessage")).to_have_text("You have done a dynamic click")
+
+def test_dynamic_properties(page):
+    page.goto(DYNAMIC_PROPERTIES_URL)
+
+    will_enable_button = page.locator("#enableAfter")
+    expect(will_enable_button).to_be_disabled()
+
+    page.wait_for_selector("#enableAfter:not([disabled])")
+
+    expect(will_enable_button).to_be_enabled()
+
+    color_change_button = page.locator("#colorChange")
+
+    page.wait_for_function("""
+        () => {
+            const button = document.querySelector('#colorChange');
+            const style = window.getComputedStyle(button);
+            return style.color === 'rgb(220, 53, 69)';
+        }
+    """)
+
+    visible_after_button = page.locator("#visibleAfter")
+
+    if not visible_after_button.is_visible():
+        page.wait_for_selector("#visibleAfter", state="visible")
+
+    expect(visible_after_button).to_be_visible()
