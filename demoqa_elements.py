@@ -13,6 +13,7 @@ RADIO_BUTTON_URL = f"{BASE_URL}/radio-button"
 WEB_TABLES_URL =f"{BASE_URL}/webtables"
 BUTTONS_URL = f"{BASE_URL}/buttons"
 DYNAMIC_PROPERTIES_URL = f"{BASE_URL}/dynamic-properties"
+UPLOAD_DOWNLOAD_URL = f"{BASE_URL}/upload-download"
 
 USER_DATA = {
     "full_name": "Alexander Mazein",
@@ -196,3 +197,23 @@ def test_dynamic_properties(page):
         page.wait_for_selector("#visibleAfter", state="visible")
 
     expect(visible_after_button).to_be_visible()
+
+def test_upload_and_download(page):
+
+    page.goto(UPLOAD_DOWNLOAD_URL)
+
+    test_file_path = "test_upload.txt"
+    with open(test_file_path, "w") as f:
+        f.write("This is a test file content for upload testing.")
+
+    file_input = page.locator("#uploadFile")
+    file_input.set_input_files(test_file_path)
+
+    upload_result = page.locator("#uploadedFilePath")
+    expect(upload_result).to_be_visible()
+    expect(upload_result).to_contain_text("test_upload.txt")
+
+    os.remove(test_file_path)
+
+    download_button = page.locator("#downloadButton")
+    expect(download_button).to_be_visible()
