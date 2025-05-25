@@ -4,6 +4,7 @@ import pytest
 import time
 import os
 from playwright.sync_api import sync_playwright, expect
+from requests import delete
 
 BASE_URL = "https://demoqa.com"
 TEXT_BOX_URL = f"{BASE_URL}/text-box"
@@ -95,3 +96,56 @@ def test_radio_button(page):
 
     no_radio = page.locator("#noRadio")
     expect(no_radio).to_be_disabled()
+
+def test_web_tables(page):
+    new_user = {
+        "fistName": "Michael",
+        "lastName": "Smith",
+        "email": "michaelsmith@example.com",
+        "age": "22",
+        "salary": "6000",
+        "department": "QA"
+    }
+
+    edited_data = {
+        "firstName": "Michael",
+        "lastName": "Johnson",
+        "email": "michaeljohnson@example.com",
+        "age": "24",
+        "salary": "7000",
+        "department": "Development"
+    }
+
+    page.goto(WEB_TABLES_URL)
+
+    page.click("#addNewRecordButton")
+
+    page.fill("#firstName", new_user["fistName"])
+    page.fill("#lastName", new_user["lastName"])
+    page.fill("#userEmail", new_user["email"])
+    page.fill("#age", new_user["age"])
+    page.fill("#salary", new_user["salary"])
+    page.fill("#department", new_user["department"])
+
+    page.click("#submit")
+
+    page.wait_for_selector(f"//div[contains(@class, 'rt-tbody')]//div[contains(text(), '{new_user['email']}')]")
+
+    edit_button = page.locator(f"//div[contains(text(), '{new_user['email']}')]/following::div//span[@title='Edit']")
+    edit_button.click()
+
+    page.fill("#firstName", edited_data["firstName"])
+    page.fill("#lastName", edited_data["lastName"])
+    page.fill("#userEmail", edited_data["email"])
+    page.fill("#age", edited_data["age"])
+    page.fill("#salary", edited_data["salary"])
+    page.fill("#department", edited_data["department"])
+
+    page.click("#submit")
+
+    page.wait_for_selector(f"//div[contains(@class, 'rt-tbody')]//div[contains(text(), '{edited_data['email']}')]")
+
+    delete_button = page.locator(f"//div[contains(text(), '{edited_data['email']}')]/following::div//span[@title='Delete']")
+    delete_button.click()
+
+    expect(page.locator(f"//div[contains(text(), '{edited_data['email']}')]")).to_have_count(0)
