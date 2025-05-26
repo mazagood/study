@@ -14,6 +14,7 @@ WEB_TABLES_URL =f"{BASE_URL}/webtables"
 BUTTONS_URL = f"{BASE_URL}/buttons"
 DYNAMIC_PROPERTIES_URL = f"{BASE_URL}/dynamic-properties"
 UPLOAD_DOWNLOAD_URL = f"{BASE_URL}/upload-download"
+MODAL_DIALOGS_URL = f"{BASE_URL}/modal-dialogs"
 
 USER_DATA = {
     "full_name": "Alexander Mazein",
@@ -30,8 +31,8 @@ def page():
 
         page = browser.new_page()
 
-        page.set_viewport_size({"width": 1920, "height": 1080})
 
+        page.set_viewport_size({"width": 1920, "height": 1080})
         yield page
 
         browser.close()
@@ -217,3 +218,30 @@ def test_upload_and_download(page):
 
     download_button = page.locator("#downloadButton")
     expect(download_button).to_be_visible()
+
+def test_modal_dialogs(page):
+
+    page.goto(MODAL_DIALOGS_URL)
+
+    page.click("#showSmallModal")
+
+    small_modal = page.locator(".modal-content")
+    expect(small_modal).to_be_visible()
+
+    expect(page.locator(".modal-title")).to_have_text("Small Modal")
+    expect(page.locator(".modal-body")).to_contain_text("This is a small modal")
+
+    page.click("#closeSmallModal")
+
+    expect(small_modal).to_have_count(0)
+
+    page.click("#showLargeModal")
+
+    large_modal = page.locator(".modal-content")
+    expect(large_modal).to_be_visible()
+
+    expect(page.locator(".modal-title")).to_have_text("Large Modal")
+
+    page.click("#closeLargeModal")
+
+    expect(large_modal).to_have_count(0)
